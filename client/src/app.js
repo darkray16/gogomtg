@@ -1,12 +1,9 @@
-//app.js is static you put on here what you want every page to have.
-
 import React from 'react';
 
 import Home from './components/home';
 
 const DIV = React.DOM.div;
 const H3 = React.DOM.h3;
-
 
 export default class App extends React.Component {
     constructor(props) {

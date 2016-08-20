@@ -1,4 +1,3 @@
-//require middlewares here for each individual route
 const module1 = require('./modules/module1');
 const module2 = require('./modules/module2');
 const module3 = require('./modules/module3');
