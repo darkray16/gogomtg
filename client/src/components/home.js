@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
+import SearchBar from './SearchBar';
 
+const SEARCHBAR = React.createFactory(SearchBar);
 const DIV = React.DOM.div;
 const H3 = React.DOM.h3;
 
-export default class Home extends React.Component {
+export default class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {};
@@ -11,8 +13,9 @@ export default class Home extends React.Component {
 
     render() {
         return DIV({},
-            H3({}, 'home.js'),
-            'hi'
+            H3({ className: 'text-center'}, 'GoGo MTG'),
+            SEARCHBAR({}),
+                DIV({}, 'dropdown')
         );
     }
 }

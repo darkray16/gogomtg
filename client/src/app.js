@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import Home from './components/home';
 
 const DIV = React.DOM.div;
 const H3 = React.DOM.h3;
 
-export default class App extends React.Component {
+export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {};
@@ -13,8 +13,6 @@ export default class App extends React.Component {
 
     render() {
         return DIV({},
-            H3({}, 'app.js'),
-            'hello world',
             React.cloneElement(this.props.children, { app: this })
         );
     }
