@@ -1,3 +1,32 @@
 .input-group{
     width: 50%;
 }
+
+.dropDown{
+    width: 50%;
+    border: 1px solid black;
+    border-bottom: none;
+    border-radius: 5px;
+    padding: 5px 5px 5px 5px;
+}
+
+.dropDown:last-child{
+    border-bottom: 1px solid black;
+}
+
+.marginBottom1{
+    margin-bottom: 1px;
+}
+
+#searchBar{
+    padding: 5px 5px 5px 5px;
+    font-size: 34px;
+    height: 60px;
+    width: 450px;
+}
+
+#searchBarButton{
+    top: 0px;
+    height: 60px;
+    width: 55px;
+}

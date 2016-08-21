@@ -14,8 +14,7 @@ export default class Home extends Component {
     render() {
         return DIV({},
             H3({ className: 'text-center'}, 'GoGo MTG'),
-            SEARCHBAR({}),
-                DIV({}, 'dropdown')
+            SEARCHBAR({})
         );
     }
 }
