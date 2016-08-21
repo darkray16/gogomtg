@@ -17,9 +17,8 @@ export default class SearchBar extends Component {
         self = this;
         app = props.app;
         this.state = {
-            cards: [{name: 'Jace Beleren', set: 'M11'}, {name: 'Kiln Fiend', set: 'M12'}, {name: 'Steppe Lynx', set: 'M12'}],
             query: '',
-            cardsForDropdown: [],
+            cardsForDropdown: [{name: 'Jace Beleren', set: 'M11'}, {name: 'Kiln Fiend', set: 'M12'}, {name: 'Steppe Lynx', set: 'M12'}],
             name: '',
             set: ''
         };
@@ -47,7 +46,7 @@ export default class SearchBar extends Component {
         self.setState({ query: event.target.value });
     }
 
-    submitQuery(event) {
+    priceCheck(event) {
         if(event.keyCode === 13 || event.type === 'click') {
             request
                 .post('http://localhost:8200/priceCheck')
@@ -79,14 +78,14 @@ export default class SearchBar extends Component {
                 placeholder: 'Card Name',
                 value: self.state.query,
                 onChange: self.updateQuery,
-                onKeyDown: self.submitQuery,
+                onKeyDown: self.priceCheck,
                 onKeyUp: self.requestCardsForDropdown
             }),
                 SPAN({ className: 'input-group-btn center-block' },
-                    BUTTON({ id: 'searchBarButton', className: 'btn btn-default glyphicon glyphicon-search', type: 'button', onClick: self.pressQuery })
+                    BUTTON({ id: 'searchBarButton', className: 'btn btn-default glyphicon glyphicon-search', type: 'button', onClick: self.priceCheck })
                 )
             ),
-            DROPDOWN({cards: self.state.cards})
+            DROPDOWN({cards: self.state.cardsForDropdown})
         );
     }
 }
