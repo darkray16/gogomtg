@@ -11,8 +11,11 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.15.2",
+    "connect-timeout": "^1.7.0",
     "cors": "^2.7.1",
     "express": "^4.13.4",
-    "mongoose": "^4.4.20"
+    "file-system": "^2.2.1",
+    "mongoose": "^4.4.20",
+    "superagent": "^2.2.0"
   }
 }
