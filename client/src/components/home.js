@@ -4,6 +4,8 @@ import Dropdown from './Dropdown';
 
 const DIV = React.DOM.div;
 const H3 = React.DOM.h3;
+const SELECT = React.DOM.select;
+const OPTION = React.DOM.option;
 const INPUT = React.DOM.input;
 const SPAN = React.DOM.span;
 const BUTTON = React.DOM.button;
@@ -18,6 +20,7 @@ export default class Home extends Component {
         this.state = {
             query: '',
             cardsForDropdown: [],
+            setsForDropdown: [],
             currentName: '',
             currentSet: ''
         };
@@ -73,16 +76,28 @@ export default class Home extends Component {
         }
     }
 
-    renderDropDown() {
-        console.log(self.state.cardsForDropdown);
+    renderCardsForDropdown() {
         if(self.state.query === '') {
             return;
         } else {
-            return DROPDOWN({cards: self.state.cardsForDropdown});
+            return DROPDOWN({home: self, cards: self.state.cardsForDropdown});
         }
     }
 
-    //renderSelectBox  value is dependant on optionselectdata
+    renderSetsForDropdown() {
+        var data = self.state.setsForDropdown;
+        var storage = [];
+        for(var i = 0; i < data.length; i++) {
+            if(!data[i]) {
+                storage.push(data[i]);
+            }
+        }
+        return SELECT({},
+            data.map((set, index) => {
+                return OPTION({key: index}, set);
+            })
+        );
+    }
 
     render() {
         return DIV({},
@@ -96,7 +111,8 @@ export default class Home extends Component {
                 onChange: self.updateQuery
                 })
             ),
-            self.renderDropDown({home: self})
+            self.renderCardsForDropdown(),
+            self.renderSetsForDropdown()
         );
     }
 }

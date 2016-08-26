@@ -10,6 +10,12 @@
     border-bottom: 1px solid black;
 }
 
+.dropDown:hover{
+    background-color: #E4EBED;
+    cursor: pointer;
+    cursor: hand;
+}
+
 .marginBottom1{
     margin-bottom: 1px;
 }
