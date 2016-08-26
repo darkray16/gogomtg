@@ -10,7 +10,7 @@ export default class Dropdown extends Component{
         home = props.home;
         this.state = {};
     }
-
+    //onclick set home state optionselectdata = cardsForDropdown[index]
     render() {
         return DIV({},
             this.props.cards.map((card, index) => {

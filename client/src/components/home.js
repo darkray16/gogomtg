@@ -82,6 +82,8 @@ export default class Home extends Component {
         }
     }
 
+    //renderSelectBox  value is dependant on optionselectdata
+
     render() {
         return DIV({},
             H3({ className: 'text-center'}, 'GoGo MTG'),
