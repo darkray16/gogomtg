@@ -21,7 +21,6 @@ export default class Home extends Component {
             query: '',
             cardsForDropdown: [],
             setsForDropdown: [],
-            currentName: '',
             currentSet: ''
         };
     }
@@ -51,6 +50,13 @@ export default class Home extends Component {
                 self.requestCardsForDropdown();
             });
         }
+    }
+
+    updateCurrentSet(event) {
+        //onchange renderSetsForDropdown select list
+        self.setState({ currentSet: event.target.value }, () => {
+            console.log(self.state);
+        });
     }
 
     priceCheck(event) {
@@ -87,16 +93,19 @@ export default class Home extends Component {
     renderSetsForDropdown() {
         var data = self.state.setsForDropdown;
         var storage = [];
+
         for(var i = 0; i < data.length; i++) {
             if(!data[i]) {
                 storage.push(data[i]);
             }
         }
-        return SELECT({},
+        return SELECT({ onChange: (e) => { self.updateCurrentSet(e); }},
+            OPTION({ value: '' }, 'What Set is it From?'),
             data.map((set, index) => {
-                return OPTION({key: index}, set);
+                return OPTION({key: index, value: set}, set);
             })
         );
+
     }
 
     render() {
