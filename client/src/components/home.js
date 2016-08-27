@@ -25,6 +25,29 @@ export default class Home extends Component {
         };
     }
 
+    priceCheck() {
+        request
+        .post('http://localhost:8200/priceCheck')
+        .send({
+            name: self.state.query,
+            set: self.state.currentSet
+        })
+        .end((err, res) => {
+            if(err) {
+                throw err;
+            }
+            var imgUrl = JSON.parse(res.text).imgUrl[0];
+            var price = JSON.parse(res.text).price[0];
+            console.log('imgUrl: ', imgUrl);
+            // self.setState({
+            //     priceOfCard: price || 'Sorry no price data for ' + self.state.currentCard,
+            //     pictureOfCard: imgUrl || 'Sorry no img data for ' + self.state.currentCard,
+            //     query: '',
+            //     setsForDropdown: []
+            // });
+        });
+    }
+
     requestCardsForDropdown() {
         window.clearTimeout(timeout);
         timeout = window.setTimeout(() => {
@@ -37,7 +60,7 @@ export default class Home extends Component {
                     if(err){
                         throw err;
                     }
-                    self.setState({cardsForDropdown: JSON.parse(res.text)});
+                    self.setState({ cardsForDropdown: JSON.parse(res.text) });
                 });
         }, 200);
     }
@@ -53,40 +76,17 @@ export default class Home extends Component {
     }
 
     updateCurrentSet(event) {
-        //onchange renderSetsForDropdown select list
         self.setState({ currentSet: event.target.value }, () => {
             console.log(self.state);
         });
     }
 
-    priceCheck(event) {
-        if(event.keyCode === 13 || event.type === 'click') {
-            request
-                .post('http://localhost:8200/priceCheck')
-                .send({
-                    cardName: self.state.currentCard,
-                    cardSet: self.state.currentSet
-                })
-                .end((err, res) => {
-                    if(err) {
-                        throw err;
-                    }
-                    var imgUrl = JSON.parse(res.text).imgUrl[0];
-                    var price = JSON.parse(res.text).price[0];
-                    self.setState({
-                        priceOfCard: price || 'Sorry no price data for ' + self.state.currentCard,
-                        pictureOfCard: imgUrl || 'Sorry no img data for ' + self.state.currentCard,
-                        query: ''
-                    });
-                });
-        }
-    }
 
     renderCardsForDropdown() {
         if(self.state.query === '') {
             return;
         } else {
-            return DROPDOWN({home: self, cards: self.state.cardsForDropdown});
+            return DROPDOWN({ home: self, cards: self.state.cardsForDropdown });
         }
     }
 
@@ -99,13 +99,16 @@ export default class Home extends Component {
                 storage.push(data[i]);
             }
         }
-        return SELECT({ onChange: (e) => { self.updateCurrentSet(e); }},
-            OPTION({ value: '' }, 'What Set is it From?'),
+        return SELECT({ className: 'form-control', onChange: (e) => { self.updateCurrentSet(e); }},
+            OPTION({ value: '' }, self.state.query.length? 'What Set is it From?': ''),
             data.map((set, index) => {
                 return OPTION({key: index, value: set}, set);
             })
         );
+    }
 
+    renderQueryButton() {
+        return BUTTON({ type: 'submit', className: 'btn btn-default', onClick: self.priceCheck }, 'GO');
     }
 
     render() {
@@ -121,7 +124,8 @@ export default class Home extends Component {
                 })
             ),
             self.renderCardsForDropdown(),
-            self.renderSetsForDropdown()
+            self.renderSetsForDropdown(),
+            self.renderQueryButton()
         );
     }
 }
