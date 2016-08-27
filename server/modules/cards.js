@@ -1,4 +1,3 @@
-//modules are for route endpoints
 const Cards = module.exports;
 const Card = require('../models/card');
 
