@@ -114,24 +114,36 @@ export default class Home extends Component {
     }
 
     renderCardInfo() {
-        return DIV({},
-            IMAGE({ src: self.state.pictureOfCard }),
-            DIV({}, self.state.priceOfCard)
+        return DIV({ className: 'row' },
+            DIV({ className: 'col-xs-4'}),
+            DIV({ className: 'col-xs-4'},
+                DIV({ className: 'col-xs-4'}, 'test'),
+                DIV({ className: 'col-xs-4'}, IMAGE({ src: self.state.pictureOfCard, style: {'maxWidth': '50px'} })),
+                DIV({ className: 'col-xs-4'}, 'test')
+            ),
+            DIV({ className: 'col-xs-4' }, self.state.priceOfCard)
         );
+    }
+
+    renderQueryBox() {
+        return DIV({ className: 'input-group marginBottom1' },
+                    INPUT({ type: 'text',
+                        className: 'form-control',
+                        id: 'queryBox',
+                        placeholder: 'Card Name',
+                        value: self.state.query,
+                        onChange: self.updateQuery
+                    })
+                );
     }
 
     render() {
         return DIV({},
-            H3({ className: 'text-center'}, 'GoGo MTG'),
-            DIV({ className: 'input-group center-block marginBottom1' },
-                INPUT({ type: 'text',
-                className: 'form-control',
-                id: 'searchBar',
-                placeholder: 'Card Name',
-                value: self.state.query,
-                onChange: self.updateQuery
-                })
-            ),
+            H3({
+                className: 'text-center',
+                id: 'title'
+            }, 'GOGOMTG '),
+            self.renderQueryBox(),
             self.renderCardsForDropdown(),
             self.renderSetsForDropdown(),
             self.renderQueryButton(),

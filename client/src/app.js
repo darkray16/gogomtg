@@ -12,7 +12,7 @@ export default class App extends Component {
     }
 
     render() {
-        return DIV({},
+        return DIV({ id: 'wrap' },
             React.cloneElement(this.props.children, { app: this })
         );
     }

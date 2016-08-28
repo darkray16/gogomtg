@@ -1,13 +1,20 @@
-.dropDown{
-    width: 50%;
-    border: 1px solid black;
-    border-bottom: none;
-    border-radius: 5px;
-    padding: 5px 5px 5px 5px;
+html * {
+   font-family: "Arial Black" !important;
 }
 
-.dropDown:last-child{
+#wrap {
+	width: 900px;
+	margin: 0 auto;
+}
+
+.dropDown{
+    width: 180px;
+    height: 180px;
+    float: left;
+    padding-top: 75px;
+    border: 1px solid black;
     border-bottom: 1px solid black;
+    border-radius: 5px;
 }
 
 .dropDown:hover{
@@ -18,4 +25,16 @@
 
 .marginBottom1{
     margin-bottom: 1px;
+}
+
+#title{
+    font-style: italic;
+    letter-spacing: -12px;
+    color: #FE7C00;
+    font-size: 166px;
+    height: 190px;
+}
+
+#queryBox{
+
 }
