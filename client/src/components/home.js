@@ -24,7 +24,9 @@ export default class Home extends Component {
             setsForDropdown: [],
             currentSet: '',
             priceOfCard: '',
-            pictureOfCard: ''
+            pictureOfCard: '',
+            traderOneTotal: 0,
+            traderTwoTotal: 0
         };
     }
 
@@ -101,8 +103,8 @@ export default class Home extends Component {
                 storage.push(data[i]);
             }
         }
-        return SELECT({ className: 'form-control', onChange: (e) => { self.updateCurrentSet(e); }},
-            OPTION({ value: '' }, self.state.query.length? 'What Set is it From?': ''),
+        return SELECT({ className: 'form-control', id: 'setBox', onChange: (e) => { self.updateCurrentSet(e); }},
+            OPTION({ value: '' }, self.state.query.length? 'Choose a set!': ''),
             data.map((set, index) => {
                 return OPTION({key: index, value: set}, set);
             })
@@ -110,18 +112,13 @@ export default class Home extends Component {
     }
 
     renderQueryButton() {
-        return BUTTON({ type: 'submit', className: 'btn btn-default', onClick: self.priceCheck }, 'GO');
+        return BUTTON({ type: 'submit', className: 'btn btn-default', id: 'submit', onClick: self.priceCheck }, 'GO');
     }
 
     renderCardInfo() {
-        return DIV({ className: 'row' },
-            DIV({ className: 'col-xs-4'}),
-            DIV({ className: 'col-xs-4'},
-                DIV({ className: 'col-xs-4'}, 'test'),
-                DIV({ className: 'col-xs-4'}, IMAGE({ src: self.state.pictureOfCard, style: {'maxWidth': '50px'} })),
-                DIV({ className: 'col-xs-4'}, 'test')
-            ),
-            DIV({ className: 'col-xs-4' }, self.state.priceOfCard)
+        return DIV({},
+            IMAGE({ className: 'center-block', src: self.state.pictureOfCard, id: 'pictureOfCard' }),
+            DIV({ className: 'text-center', id: 'priceOfCard' }, self.state.priceOfCard)
         );
     }
 
@@ -130,11 +127,47 @@ export default class Home extends Component {
                     INPUT({ type: 'text',
                         className: 'form-control',
                         id: 'queryBox',
-                        placeholder: 'Card Name',
+                        placeholder: 'Enter card name',
                         value: self.state.query,
                         onChange: self.updateQuery
                     })
                 );
+    }
+
+    renderTraderButtons() {
+        return DIV({ className: 'center-block'},
+        DIV({className: 'text-center'},
+            DIV({ className: 'row'},
+                DIV({className: 'col-xs-6'},
+                    DIV({ className: 'traderBtn' }, 'TRADER ONE')
+                ),
+                DIV({className: 'col-xs-6'},
+                    DIV({ className: 'traderBtn' }, 'TRADER TWO')
+                )
+            )
+        )
+    );
+    }
+
+    renderTotals() {
+        return DIV({ className: 'row'},
+            DIV({ className: 'col-xs-6'},
+                DIV({ className: 'text-center traderHeaders' }, 'TRADER ONE'),
+                DIV({ className: 'text-center bling' }, '$ ', self.state.traderOneTotal)
+            ),
+            DIV({ className: 'col-xs-6'},
+                DIV({ className: 'text-center traderHeaders' }, 'TRADER TWO'),
+                DIV({ className: 'text-center bling' }, '$ ', self.state.traderTwoTotal)
+            )
+        );
+    }
+
+    renderLists() {
+        //each column with have a table mapped with cards and prices from an array in the state.
+        return DIV({ className: 'row'},
+            DIV({className: 'col-xs-6'}),
+            DIV({className: 'col-xs-6'})
+        );
     }
 
     render() {
@@ -143,11 +176,23 @@ export default class Home extends Component {
                 className: 'text-center',
                 id: 'title'
             }, 'GOGOMTG '),
-            self.renderQueryBox(),
-            self.renderCardsForDropdown(),
-            self.renderSetsForDropdown(),
-            self.renderQueryButton(),
-            self.renderCardInfo()
+            DIV({ className: 'row' },
+                DIV({ className: 'col-xs-6'},
+                    self.renderQueryBox(),
+                    DIV({ className: 'spacer' }),
+                    self.renderCardsForDropdown(),
+                    self.renderSetsForDropdown(),
+                    DIV({ className: 'spacer' }),
+                    self.renderQueryButton(),
+                    DIV({ className: 'spacer' }),
+                    self.state.priceOfCard? self.renderTraderButtons() : ''
+                ),
+                DIV({ className: 'col-xs-6'},
+                    self.renderCardInfo()
+                )
+            ),
+            self.renderTotals(),
+            self.renderLists
         );
     }
 }

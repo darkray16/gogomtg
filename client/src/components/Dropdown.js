@@ -17,7 +17,7 @@ export default class Dropdown extends Component{
     }
 
     render() {
-        return DIV({},
+        return DIV({ className: 'center-block' },
             this.props.cards.map((card, index) => {
                 return DIV({ value: card.name, className: 'dropDown text-center', key: index, onClick: () => { self.selectCard(card.name, index); } }, card.name);
             })

@@ -8,11 +8,16 @@ html * {
 }
 
 .dropDown{
-    width: 180px;
+    width: 450px;
     height: 180px;
     float: left;
+    font-size: 30px;
+    color: white;
+    background-color: #FE7C00;
+    margin-right: 5px;
+    margin-bottom: 5px;
     padding-top: 75px;
-    border: 1px solid black;
+    border: none;
     border-bottom: 1px solid black;
     border-radius: 5px;
 }
@@ -27,14 +32,66 @@ html * {
     margin-bottom: 1px;
 }
 
+.traderHeaders{
+    font-size: 55px;
+    color: black;
+    font-style: italic;
+}
+
+.bling{
+    font-size: 65px;
+}
+
+.traderBtn{
+    display: inline-block;
+    color: white;
+    background-color: black;
+    width: 218px;
+    border-radius: 5px;
+    font-style: italic;
+    font-size: 24px;
+    height: 100px;
+    padding-top: 32px;
+}
+
+.spacer{
+    height: 25px;
+}
+
 #title{
     font-style: italic;
     letter-spacing: -12px;
     color: #FE7C00;
     font-size: 166px;
-    height: 190px;
+    height: 200px;
 }
 
 #queryBox{
+    height: 80px;
+    width: 450px;
+    font-size: 30px;
+}
 
+#setBox {
+    height: 80px;
+    width: 450px;
+    font-size: 30px;
+}
+
+#submit {
+    color: white;
+    background-color: #FE7C00;
+    margin-right: 5px;
+    height: 40px;
+    width: 450px;
+    font-size: 20px;
+    border: none;
+}
+
+#picture {
+    max-width: 250px;
+}
+
+#priceOfCard {
+    font-size: 50px
 }
