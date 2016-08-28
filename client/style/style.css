@@ -52,10 +52,16 @@ html * {
     font-size: 24px;
     height: 100px;
     padding-top: 32px;
+    cursor: pointer;
+    cursor: hand;
 }
 
 .spacer{
     height: 45px;
+}
+
+.errorMessage{
+    color: tomato;
 }
 
 #title{
@@ -88,7 +94,7 @@ html * {
     border: none;
 }
 
-#picture {
+.pictureOfCard {
     max-width: 250px;
 }
 

@@ -26,41 +26,44 @@ export default class Home extends Component {
             priceOfCard: '',
             pictureOfCard: '',
             traderOneTotal: 0,
-            traderTwoTotal: 0
+            traderTwoTotal: 0,
+            traderOneList: [],
+            traderTwoList: [],
+            nameForList: ''
         };
     }
 
     priceCheck() {
-        request
-        .post('http://localhost:8200/priceCheck')
-        .send({
-            name: self.state.query,
-            set: self.state.currentSet
-        })
-        .end((err, res) => {
-            if(err) {
-                throw err;
-            }
-            var imgUrl = JSON.parse(res.text).imgUrl[0];
-            var price = JSON.parse(res.text).price[0];
-            self.setState({
-                priceOfCard: price || 'Sorry no price data for ' + self.state.currentCard,
-                pictureOfCard: imgUrl || 'Sorry no img data for ' + self.state.currentCard,
-                query: '',
-                setsForDropdown: []
-            });
-        });
-    }
-
-
-    updateQuery(event) {
-        if(event.target.value === '') {
-            self.setState({ cardsForDropdown: [], query: '' });
-        } else {
-            self.setState({ query: event.target.value }, () => {
-                self.requestCardsForDropdown();
-            });
+        if(self.state.cardsForDropdown.length > 0) {
+            return self.setState({ errorMessage: 'Please tap/click on a card name.'});
         }
+        if(self.state.query.length === 0) {
+            return self.setState({ errorMessage: 'Please enter a card name above.'});
+        }
+        if(!self.state.currentSet) {
+            return self.setState({ errorMessage: 'Please select a set for your lookup'});
+        }
+        request
+            .post('http://localhost:8200/priceCheck')
+            .send({
+                name: self.state.query,
+                set: self.state.currentSet
+            })
+            .end((err, res) => {
+                if(err) {
+                    throw err;
+                }
+                var imgUrl = JSON.parse(res.text).imgUrl[0];
+                var price = JSON.parse(res.text).price[0];
+                self.setState({
+                    priceOfCard: price || 'Sorry no price data for ' + self.state.currentCard,
+                    pictureOfCard: imgUrl || 'Sorry no img data for ' + self.state.currentCard,
+                    query: '',
+                    nameForList: self.state.query,
+                    setsForDropdown: [],
+                    errorMessage: ''
+                });
+            });
     }
 
     requestCardsForDropdown() {
@@ -80,10 +83,39 @@ export default class Home extends Component {
         }, 200);
     }
 
+    updateQuery(event) {
+        if(event.target.value === '') {
+            self.setState({ cardsForDropdown: [], query: '' });
+        } else {
+            self.setState({ query: event.target.value }, () => {
+                self.requestCardsForDropdown();
+            });
+        }
+    }
+
+    updateTotal(event) {
+        var obj = {
+            name: self.state.nameForList,
+            set: self.state.currentSet,
+            price: parseFloat(self.state.priceOfCard.split('$')[1]).toFixed(2)
+        };
+
+        if(event.target.dataset.trader === '1') {
+            self.setState({
+                traderOneTotal: (parseFloat(self.state.traderOneTotal) + parseFloat(self.state.priceOfCard.split('$')[1])).toFixed(2),
+                traderOneList: [...self.state.traderOneList, obj]
+            });
+        } else {
+            self.setState({
+                traderTwoTotal: (parseFloat(self.state.traderTwoTotal) + parseFloat(self.state.priceOfCard.split('$')[1])).toFixed(2),
+                traderTwoList: [...self.state.traderTwoList, obj]
+            });
+        }
+    }
+
+
     updateCurrentSet(event) {
-        self.setState({ currentSet: event.target.value }, () => {
-            console.log(self.state);
-        });
+        self.setState({ currentSet: event.target.value });
     }
 
 
@@ -119,7 +151,7 @@ export default class Home extends Component {
 
     renderCardInfo() {
         return DIV({},
-            IMAGE({ className: 'center-block', src: self.state.pictureOfCard, id: 'pictureOfCard' }),
+            IMAGE({ className: 'center-block pictureOfCard', src: self.state.pictureOfCard }),
 
             //this is going to be a col-4 col-4 col-4 with 3 price ranges, clickable HREFS. yeet
             DIV({ className: 'text-center', id: 'priceOfCard' }, self.state.priceOfCard)
@@ -144,10 +176,10 @@ export default class Home extends Component {
         DIV({className: 'text-center'},
             DIV({ className: 'row'},
                 DIV({className: 'col-xs-6'},
-                    DIV({ className: 'traderBtn' }, 'TRADER ONE')
+                    DIV({ className: 'traderBtn', 'data-trader': '1', onClick: self.updateTotal }, 'TRADER ONE')
                 ),
                 DIV({className: 'col-xs-6'},
-                    DIV({ className: 'traderBtn' }, 'TRADER TWO')
+                    DIV({ className: 'traderBtn', 'data-trader': '2', onClick: self.updateTotal }, 'TRADER TWO')
                 )
             )
         )
@@ -167,11 +199,64 @@ export default class Home extends Component {
         );
     }
 
+    removeFromList(event) {
+        var playerAndIndex = event.target.dataset.info;
+        var arrayified = playerAndIndex.split(',');
+        var player = arrayified[0];
+        var index = arrayified[1];
+        if(player === '1') {
+            let quickPrice = self.state.traderOneList[index].price;
+            self.state.traderOneList.splice(index, 1);
+            self.setState({
+                traderOneList: self.state.traderOneList,
+                traderOneTotal: (parseFloat(self.state.traderOneTotal) - parseFloat(quickPrice)).toFixed(2)
+            });
+        } else {
+            let quickPrice = self.state.traderTwoList[index].price;
+            self.state.traderTwoList.splice(index, 1);
+            self.setState({
+                traderTwoList: self.state.traderTwoList,
+                traderTwoTotal: (parseFloat(self.state.traderTwoTotal) - parseFloat(quickPrice)).toFixed(2)
+            });
+        }
+    }
+
     renderLists() {
-        //each column with have a table mapped with cards and prices from an array in the state.
         return DIV({ className: 'row'},
-            DIV({className: 'col-xs-6'}),
-            DIV({className: 'col-xs-6'})
+            DIV({className: 'col-xs-6'},
+                self.state.traderOneList.map((item, index) => {
+                    return DIV({ key: index, className: 'row'},
+                        DIV({ className: 'col-xs-2'},
+                            BUTTON({
+                                'data-info': 1 + ',' + index,
+                                className: 'btn btn-default',
+                                onClick: self.removeFromList
+                            }, 'hi')
+                        ),
+                        DIV({ className: 'col-xs-10'},
+                            DIV({}, item.name + ' $ ' + item.price),
+                            DIV({}, item.set)
+                        )
+                    );
+                })
+            ),
+            DIV({key: 999, className: 'col-xs-6'},
+                self.state.traderTwoList.map((item, index) => {
+                    return DIV({ key: index, className: 'row'},
+                        DIV({ className: 'col-xs-2'},
+                            BUTTON({
+                                'data-info': 2 + ',' + index,
+                                className: 'btn btn-default',
+                                onClick: self.removeFromList
+                            }, 'hi')
+                        ),
+                        DIV({ className: 'col-xs-10'},
+                            DIV({}, item.name + ' $ ' + item.price),
+                            DIV({}, item.set)
+                        )
+                    );
+                })
+            )
         );
     }
 
@@ -189,6 +274,7 @@ export default class Home extends Component {
                     self.renderSetsForDropdown(),
                     DIV({ className: 'spacer' }),
                     self.renderQueryButton(),
+                    DIV({ className: 'errorMessage' }, self.state.errorMessage),
                     DIV({ className: 'spacer' }),
                     self.state.priceOfCard? self.renderTraderButtons() : ''
                 ),
@@ -197,7 +283,7 @@ export default class Home extends Component {
                 )
             ),
             self.renderTotals(),
-            self.renderLists
+            self.renderLists()
         );
     }
 }
