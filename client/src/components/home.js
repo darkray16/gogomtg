@@ -9,6 +9,7 @@ const OPTION = React.DOM.option;
 const INPUT = React.DOM.input;
 const SPAN = React.DOM.span;
 const BUTTON = React.DOM.button;
+const IMAGE = React.DOM.img;
 const DROPDOWN = React.createFactory(Dropdown);
 
 var self, timeout;
@@ -21,7 +22,9 @@ export default class Home extends Component {
             query: '',
             cardsForDropdown: [],
             setsForDropdown: [],
-            currentSet: ''
+            currentSet: '',
+            priceOfCard: '',
+            pictureOfCard: ''
         };
     }
 
@@ -38,13 +41,12 @@ export default class Home extends Component {
             }
             var imgUrl = JSON.parse(res.text).imgUrl[0];
             var price = JSON.parse(res.text).price[0];
-            console.log('imgUrl: ', imgUrl);
-            // self.setState({
-            //     priceOfCard: price || 'Sorry no price data for ' + self.state.currentCard,
-            //     pictureOfCard: imgUrl || 'Sorry no img data for ' + self.state.currentCard,
-            //     query: '',
-            //     setsForDropdown: []
-            // });
+            self.setState({
+                priceOfCard: price || 'Sorry no price data for ' + self.state.currentCard,
+                pictureOfCard: imgUrl || 'Sorry no img data for ' + self.state.currentCard,
+                query: '',
+                setsForDropdown: []
+            });
         });
     }
 
@@ -111,6 +113,13 @@ export default class Home extends Component {
         return BUTTON({ type: 'submit', className: 'btn btn-default', onClick: self.priceCheck }, 'GO');
     }
 
+    renderCardInfo() {
+        return DIV({},
+            IMAGE({ src: self.state.pictureOfCard }),
+            DIV({}, self.state.priceOfCard)
+        );
+    }
+
     render() {
         return DIV({},
             H3({ className: 'text-center'}, 'GoGo MTG'),
@@ -125,7 +134,8 @@ export default class Home extends Component {
             ),
             self.renderCardsForDropdown(),
             self.renderSetsForDropdown(),
-            self.renderQueryButton()
+            self.renderQueryButton(),
+            self.renderCardInfo()
         );
     }
 }
