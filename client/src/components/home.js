@@ -52,22 +52,6 @@ export default class Home extends Component {
         });
     }
 
-    requestCardsForDropdown() {
-        window.clearTimeout(timeout);
-        timeout = window.setTimeout(() => {
-            request
-                .post('http://localhost:8200/getCardsInDB')
-                .send({
-                    query: self.state.query
-                })
-                .end((err, res) => {
-                    if(err){
-                        throw err;
-                    }
-                    self.setState({ cardsForDropdown: JSON.parse(res.text) });
-                });
-        }, 200);
-    }
 
     updateQuery(event) {
         if(event.target.value === '') {
@@ -77,6 +61,23 @@ export default class Home extends Component {
                 self.requestCardsForDropdown();
             });
         }
+    }
+
+    requestCardsForDropdown() {
+        window.clearTimeout(timeout);
+        timeout = window.setTimeout(() => {
+            request
+            .post('http://localhost:8200/getCardsInDB')
+            .send({
+                query: self.state.query
+            })
+            .end((err, res) => {
+                if(err){
+                    throw err;
+                }
+                self.setState({ cardsForDropdown: JSON.parse(res.text) });
+            });
+        }, 200);
     }
 
     updateCurrentSet(event) {
@@ -98,14 +99,15 @@ export default class Home extends Component {
         var data = self.state.setsForDropdown;
         var storage = [];
 
+        //filters out empty string sets
         for(var i = 0; i < data.length; i++) {
-            if(!data[i]) {
+            if(data[i] !== '') {
                 storage.push(data[i]);
             }
         }
         return SELECT({ className: 'form-control', id: 'setBox', onChange: (e) => { self.updateCurrentSet(e); }},
             OPTION({ value: '' }, self.state.query.length? 'Choose a set!': ''),
-            data.map((set, index) => {
+            storage.map((set, index) => {
                 return OPTION({key: index, value: set}, set);
             })
         );
@@ -118,7 +120,10 @@ export default class Home extends Component {
     renderCardInfo() {
         return DIV({},
             IMAGE({ className: 'center-block', src: self.state.pictureOfCard, id: 'pictureOfCard' }),
+
+            //this is going to be a col-4 col-4 col-4 with 3 price ranges, clickable HREFS. yeet
             DIV({ className: 'text-center', id: 'priceOfCard' }, self.state.priceOfCard)
+
         );
     }
 
@@ -127,7 +132,7 @@ export default class Home extends Component {
                     INPUT({ type: 'text',
                         className: 'form-control',
                         id: 'queryBox',
-                        placeholder: 'Enter card name',
+                        placeholder: 'Enter a card name!',
                         value: self.state.query,
                         onChange: self.updateQuery
                     })
