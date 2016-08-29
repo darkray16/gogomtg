@@ -1,8 +1,11 @@
-# GoGoMTG
+# GOGOMTG : Simple, fast, and low on data
+https://travis-ci.org/austinyearlykim/gogomtg.svg?branch=master
+---
+Inside Client directory (localhost: 8080):
+    `npm install`
+    `npm start`
 
-Inside Client runs at 8080:
-    npm start
-
-Inside Server runs at 8200:
-    mongod
-    npm run dev
+Inside Server directory (localhost: 8200);
+    `mongod`
+    `npm install`
+    `npm run dev`
