@@ -10,6 +10,8 @@ const INPUT = React.DOM.input;
 const SPAN = React.DOM.span;
 const BUTTON = React.DOM.button;
 const IMAGE = React.DOM.img;
+const BR = React.DOM.br;
+const A = React.DOM.a;
 const DROPDOWN = React.createFactory(Dropdown);
 
 var self, timeout;
@@ -24,6 +26,10 @@ export default class Home extends Component {
             setsForDropdown: [],
             currentSet: '',
             priceOfCard: '',
+            lowPrice: '',
+            medPrice: '',
+            highPrice: '',
+            cardLink: '',
             pictureOfCard: '',
             traderOneTotal: 0,
             traderTwoTotal: 0,
@@ -53,11 +59,17 @@ export default class Home extends Component {
                 if(err) {
                     throw err;
                 }
+                var lowPrice = parseFloat(JSON.parse(res.text).low).toFixed(2);
+                var medPrice = parseFloat(JSON.parse(res.text).med).toFixed(2);
+                var highPrice = parseFloat(JSON.parse(res.text).high).toFixed(2);
+                var link = 'http://' + JSON.parse(res.text).link;
                 var imgUrl = JSON.parse(res.text).imgUrl[0];
-                var price = JSON.parse(res.text).price[0];
                 self.setState({
-                    priceOfCard: price || 'Sorry no price data for ' + self.state.currentCard,
-                    pictureOfCard: imgUrl || 'Sorry no img data for ' + self.state.currentCard,
+                    medPrice: medPrice || 'Sorry no price data for ' + self.state.query,
+                    lowPrice: lowPrice,
+                    highPrice: highPrice,
+                    cardLink: link,
+                    pictureOfCard: imgUrl || 'Sorry no image data for ' + self.state.query,
                     query: '',
                     nameForList: self.state.query,
                     setsForDropdown: [],
@@ -97,17 +109,17 @@ export default class Home extends Component {
         var obj = {
             name: self.state.nameForList,
             set: self.state.currentSet,
-            price: parseFloat(self.state.priceOfCard.split('$')[1]).toFixed(2)
+            price: parseFloat(self.state.medPrice)
         };
 
         if(event.target.dataset.trader === '1') {
             self.setState({
-                traderOneTotal: (parseFloat(self.state.traderOneTotal) + parseFloat(self.state.priceOfCard.split('$')[1])).toFixed(2),
+                traderOneTotal: (parseFloat(self.state.traderOneTotal) + parseFloat(self.state.medPrice)),
                 traderOneList: [...self.state.traderOneList, obj]
             });
         } else {
             self.setState({
-                traderTwoTotal: (parseFloat(self.state.traderTwoTotal) + parseFloat(self.state.priceOfCard.split('$')[1])).toFixed(2),
+                traderTwoTotal: (parseFloat(self.state.traderTwoTotal) + parseFloat(self.state.medPrice)),
                 traderTwoList: [...self.state.traderTwoList, obj]
             });
         }
@@ -150,21 +162,38 @@ export default class Home extends Component {
     }
 
     renderCardInfo() {
+        if(self.state.pictureOfCard) {
+
         return DIV({},
             IMAGE({ className: 'center-block pictureOfCard', src: self.state.pictureOfCard }),
-
-            //this is going to be a col-4 col-4 col-4 with 3 price ranges, clickable HREFS. yeet
-            DIV({ className: 'text-center', id: 'priceOfCard' }, self.state.priceOfCard)
-
+            DIV({ className: 'row center-block pictureOfCard'},
+                DIV({ className: 'col-xs-4 text-center low' },
+                    'Low',
+                    DIV({ className: 'text-center'}, self.state.lowPrice)
+                ),
+                DIV({ className: 'col-xs-4 text-center med' },
+                    'Med',
+                    DIV({ className: 'text-center'}, self.state.medPrice)
+                ),
+                DIV({ className: 'col-xs-4 text-center high' },
+                    'High',
+                    DIV({ className: 'text-center'}, self.state.highPrice)
+                )
+            ),
+            DIV({ className: 'text-center'},
+                A({href: self.state.cardLink}, 'Click to buy on TCGplayer')
+            )
         );
+        }
     }
 
     renderQueryBox() {
         return DIV({ className: 'input-group marginBottom1' },
                     INPUT({ type: 'text',
                         className: 'form-control',
+                        autoCorrect: false,
                         id: 'queryBox',
-                        placeholder: 'Enter a card name!',
+                        placeholder: 'Enter a card name',
                         value: self.state.query,
                         onChange: self.updateQuery
                     })
@@ -229,13 +258,14 @@ export default class Home extends Component {
                         DIV({ className: 'col-xs-2'},
                             BUTTON({
                                 'data-info': 1 + ',' + index,
-                                className: 'btn btn-default',
+                                className: 'btn btn-default removeButton',
                                 onClick: self.removeFromList
-                            }, 'hi')
+                            }, 'X')
                         ),
-                        DIV({ className: 'col-xs-10'},
-                            DIV({}, item.name + ' $ ' + item.price),
-                            DIV({}, item.set)
+                        DIV({ className: 'col-xs-10 listItem'},
+                            DIV({className: 'listName'}, item.name),
+                            DIV({className: 'listSet'}, item.set),
+                            DIV({className: 'listPrice'}, ' $ ' + item.price)
                         )
                     );
                 })
@@ -246,13 +276,14 @@ export default class Home extends Component {
                         DIV({ className: 'col-xs-2'},
                             BUTTON({
                                 'data-info': 2 + ',' + index,
-                                className: 'btn btn-default',
+                                className: 'btn btn-default removeButton',
                                 onClick: self.removeFromList
-                            }, 'hi')
+                            }, 'X')
                         ),
-                        DIV({ className: 'col-xs-10'},
-                            DIV({}, item.name + ' $ ' + item.price),
-                            DIV({}, item.set)
+                        DIV({ className: 'col-xs-10 listItem'},
+                            DIV({ className: 'listName'}, item.name),
+                            DIV({className: 'listSet'}, item.set),
+                            DIV({className: 'listPrice'}, ' $ ' + item.price)
                         )
                     );
                 })
@@ -274,14 +305,15 @@ export default class Home extends Component {
                     self.renderSetsForDropdown(),
                     DIV({ className: 'spacer' }),
                     self.renderQueryButton(),
-                    DIV({ className: 'errorMessage' }, self.state.errorMessage),
+                    DIV({ className: 'errorMessage text-center' }, self.state.errorMessage),
                     DIV({ className: 'spacer' }),
-                    self.state.priceOfCard? self.renderTraderButtons() : ''
+                    self.state.medPrice? self.renderTraderButtons() : ''
                 ),
                 DIV({ className: 'col-xs-6'},
                     self.renderCardInfo()
                 )
             ),
+            BR({}),
             self.renderTotals(),
             self.renderLists()
         );
