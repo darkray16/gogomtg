@@ -1,0 +1,10 @@
+sudo: required
+dist: trusty
+language: node_js
+before_install: cd client && npm install && cd .. && cd server && cd npm install
+script: cd server && npm test
+after_success:
+node_js:
+  - '6.2.2'
+git:
+  depth: 3
