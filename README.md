@@ -1,4 +1,4 @@
-# GOGOMTG : Simple, fast, and low on data
+# GOGOMTG : Simple, fast, and low mobile data solution to trading.
 ![Travis Build Master Branch](https://travis-ci.org/austinyearlykim/gogomtg.svg?branch=master)
 ---
 Inside Client directory (localhost: 8080):
