@@ -8,7 +8,7 @@ const cors = require('cors');
 const redis = require('redis');
 const ENV = require('../.config.js');
 
-const REDIS = redis.createClient(ENV.REDIS_PORT, ENV.REDIS_URL, {no_ready_check: true});
+const REDIS = redis.createClient(ENV.REDIS_PORT, ENV.REDIS_ENDPOINT, {no_ready_check: true});
 REDIS.auth(ENV.REDIS_PASSWORD, (err) => {
     if(err) {
         throw err;
@@ -16,6 +16,7 @@ REDIS.auth(ENV.REDIS_PASSWORD, (err) => {
 });
 
 mongoose.connect('mongodb://localhost:mydb/mydb');
+// mongoose.connect('mongodb://' + ENV.MONGO_USERNAME + ENV.MONGO_PASSWORD + '@ds027175.mlab.com:27175/' + ENV.MONGO_ENDPOINT);
 
 app.use(express.static(__dirname + '/../client/'));
 app.use(bodyParser.json({ limit: '50mb', type: '*/*' }));
