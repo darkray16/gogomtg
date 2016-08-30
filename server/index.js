@@ -5,6 +5,15 @@ const http = require('http');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const redis = require('redis');
+const ENV = require('../.config.js');
+
+const REDIS = redis.createClient(ENV.REDIS_PORT, ENV.REDIS_URL, {no_ready_check: true});
+REDIS.auth(ENV.REDIS_PASSWORD, (err) => {
+    if(err) {
+        throw err;
+    }
+});
 
 mongoose.connect('mongodb://localhost:mydb/mydb');
 
@@ -14,7 +23,10 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(cors());
 router(app);
 
-const port = process.env.PORT || 8200;
-const server = http.createServer(app);
-server.listen(port);
-console.log('Server listening on: ', port);
+REDIS.on('connect', () => {
+    console.log('Connected to Redis');
+    const port = process.env.PORT || 8200;
+    const server = http.createServer(app);
+    server.listen(port);
+    console.log('Server listening on: ', port);
+});

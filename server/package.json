@@ -16,6 +16,7 @@
     "express": "^4.13.4",
     "file-system": "^2.2.1",
     "mongoose": "^4.4.20",
+    "redis": "^2.6.2",
     "superagent": "^2.2.0"
   }
 }
