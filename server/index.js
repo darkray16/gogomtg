@@ -8,8 +8,10 @@ const cors = require('cors');
 const redis = require('redis');
 const ENV = require('../.config.js');
 
-const REDIS = redis.createClient(ENV.REDIS_PORT, ENV.REDIS_ENDPOINT, {no_ready_check: true});
-REDIS.auth(ENV.REDIS_PASSWORD, (err) => {
+const REDIS = module.exports;
+
+REDIS.client = redis.createClient(ENV.REDIS_PORT, ENV.REDIS_ENDPOINT, {no_ready_check: true});
+REDIS.client.auth(ENV.REDIS_PASSWORD, (err) => {
     if(err) {
         throw err;
     }
@@ -24,7 +26,7 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(cors());
 router(app);
 
-REDIS.on('connect', () => {
+REDIS.client.on('connect', () => {
     console.log('Connected to Redis');
     const port = process.env.PORT || 8200;
     const server = http.createServer(app);
