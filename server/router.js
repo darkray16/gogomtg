@@ -5,5 +5,5 @@ const TCGplayer = require('./modules/tcgPlayer');
 module.exports = (app) => {
   app.put('/putCardsInDB', Admin.putCardsInDB);
   app.post('/getCardsInDB', Cards.getCards);
-  app.post('/priceCheck', TCGplayer.priceCheck);  //includes card look up
+  app.post('/priceCheck', TCGplayer.priceCheck); 
 };

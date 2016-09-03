@@ -2,7 +2,6 @@ const tcgPlayer = module.exports;
 const async = require('async');
 const request = require('superagent');
 const redis = require('../index.js');
-const ENV = require('../../.config.js');
 
 tcgPlayer.priceCheck = (req, resp) => {
     var cardSet = req.body.set;
