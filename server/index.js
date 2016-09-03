@@ -28,7 +28,12 @@ router(app);
 
 REDIS.client.on('connect', () => {
     console.log('Connected to Redis');
-    const port = process.env.PORT || 8200;
+    var port;
+    if(process.env.ENVIRONMENT === 'DEV') {
+        port = process.env.DEV_PORT;
+    } else {
+        port = process.env.PROD_PORT;
+    }
     const server = http.createServer(app);
     server.listen(port);
     console.log('Server listening on: ', port);
