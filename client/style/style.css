@@ -1,5 +1,5 @@
 html * {
-   font-family: "Arial Black" !important;
+   font-family: "AvenirNext-HeavyItalic" !important;
 }
 
 #wrap {
@@ -111,7 +111,7 @@ html * {
     font-style: italic;
     letter-spacing: -12px;
     color: #FE7C00;
-    font-size: 166px;
+    font-size: 182px;
     height: 200px;
 }
 
