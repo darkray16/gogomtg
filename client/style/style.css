@@ -68,6 +68,10 @@ html * {
     font-size: 20px;
 }
 
+input {
+    font-size: 30px;
+}
+
 .med{
     background-color: #5A9BD4;
     font-size: 20px;
