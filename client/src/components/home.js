@@ -193,6 +193,7 @@ export default class Home extends Component {
                         className: 'form-control',
                         autoCorrect: false,
                         id: 'queryBox',
+                        style: {fontSize: '50px'},
                         placeholder: 'Enter a card name',
                         value: self.state.query,
                         onChange: self.updateQuery
