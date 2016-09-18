@@ -181,7 +181,7 @@ export default class Home extends Component {
                 )
             ),
             DIV({ className: 'text-center'},
-                A({href: self.state.cardLink}, 'Click to buy on TCGplayer')
+                A({href: self.state.cardLink}, 'Buy ' + self.state.nameForList +' on TCGplayer')
             )
         );
         }
@@ -301,7 +301,6 @@ export default class Home extends Component {
                 DIV({ className: 'col-xs-6'},
                     self.renderQueryBox(),
                     DIV({ className: 'spacer' }),
-                    self.renderCardsForDropdown(),
                     self.renderSetsForDropdown(),
                     DIV({ className: 'spacer' }),
                     self.renderQueryButton(),
@@ -310,6 +309,7 @@ export default class Home extends Component {
                     self.state.medPrice? self.renderTraderButtons() : ''
                 ),
                 DIV({ className: 'col-xs-6'},
+                self.renderCardsForDropdown(),
                     self.renderCardInfo()
                 )
             ),
