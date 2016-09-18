@@ -149,7 +149,7 @@ export default class Home extends Component {
                 storage.push(data[i]);
             }
         }
-        return SELECT({ className: 'form-control', id: 'setBox', onChange: (e) => { self.updateCurrentSet(e); }},
+        return SELECT({ className: 'form-control', style: {fontSize: '40px'}, id: 'setBox', onChange: (e) => { self.updateCurrentSet(e); }},
             OPTION({ value: '' }, self.state.query.length? 'Choose a set!': ''),
             storage.map((set, index) => {
                 return OPTION({key: index, value: set}, set);
@@ -193,8 +193,8 @@ export default class Home extends Component {
                         className: 'form-control',
                         autoCorrect: false,
                         id: 'queryBox',
-                        style: {fontSize: '50px'},
-                        placeholder: 'Enter a card name',
+                        style: {fontSize: '40px'},
+                        placeholder: 'Card name',
                         value: self.state.query,
                         onChange: self.updateQuery
                     })
