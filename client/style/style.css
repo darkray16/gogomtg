@@ -7,6 +7,17 @@ html * {
 	margin: 0 auto;
 }
 
+.missingCard{
+    background-color: white;
+    color: #FE7C00;
+    width: 312px;
+    height: 445px;
+    border: 1px solid;
+    padding-top: 217px;
+    font-size: 30px;
+    padding-left: 10px;
+}
+
 .dropDown{
     width: 450px;
     height: 90px;

@@ -18,7 +18,7 @@ tcgPlayer.priceCheck = (req, resp) => {
     var newSet = temp1.replace(':', '');
     var temp2 = cardName.split(' ').join('-');
     var newName = temp2.replace(',', '');
-
+    console.log(newName, newSet);
     var storage = {
         //add magic for url and problem if card is not in cache first.
         link: 'http://shop.tcgplayer.com/magic/' + newSet + '/' + newName
@@ -34,7 +34,7 @@ tcgPlayer.priceCheck = (req, resp) => {
                 .get(imageQueryString)
                 .end((err ,res) => {
                     if(err) {
-                        throw err;
+                        console.log(err);
                     }
                     storage.price = price;
                     storage.imgUrl = res.body;
@@ -53,12 +53,15 @@ tcgPlayer.priceCheck = (req, resp) => {
                 chemicalX: (callback) => {
                     xray(process.env.XRAY_SOURCE + newSet + '/' + newName, process.env.XRAY_TARGET)((err, data) => {
                         var chemicalX = Number(data.replace(/[^0-9\.]+/g,""));
-                        redis.client.setex(redisQuery, chemicalX, 21600, () => {
+                        redis.client.setex(redisQuery, 21600, chemicalX, () => {
                             callback(err, chemicalX);
                         });
                     });
                 }
             }, (err, results) => {
+                if(err) {
+                    console.log(err);
+                }
                 storage.price = results.chemicalX;
                 storage.imgUrl = results.imgUrl;
                 resp.json(storage);

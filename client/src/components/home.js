@@ -26,11 +26,8 @@ export default class Home extends Component {
             setsForDropdown: [],
             currentSet: '',
             priceOfCard: '',
-            lowPrice: '',
             medPrice: '',
-            highPrice: '',
             cardLink: '',
-            pictureOfCard: '',
             traderOneTotal: 0,
             traderTwoTotal: 0,
             traderOneList: [],
@@ -59,17 +56,14 @@ export default class Home extends Component {
                 if(err) {
                     throw err;
                 }
-                var lowPrice = parseFloat(JSON.parse(res.text).low).toFixed(2);
                 var medPrice = parseFloat(JSON.parse(res.text).price).toFixed(2);
-                var highPrice = parseFloat(JSON.parse(res.text).high).toFixed(2);
                 var link = JSON.parse(res.text).link;
+                console.log(JSON.parse(res.text));
                 var imgUrl = JSON.parse(res.text).imgUrl[0];
                 self.setState({
                     medPrice: medPrice || 'Sorry no price data for ' + self.state.query,
-                    lowPrice: lowPrice,
-                    highPrice: highPrice,
                     cardLink: link,
-                    pictureOfCard: imgUrl || 'Sorry no image data for ' + self.state.query,
+                    pictureOfCard: imgUrl || '',
                     query: '',
                     nameForList: self.state.query,
                     setsForDropdown: [],
@@ -162,19 +156,20 @@ export default class Home extends Component {
     }
 
     renderCardInfo() {
-        if(self.state.pictureOfCard) {
-
-        return DIV({},
-            IMAGE({ className: 'center-block pictureOfCard', src: self.state.pictureOfCard }),
-            DIV({ className: 'row center-block pictureOfCard'},
-                DIV({ className: 'col-xs-12 text-center price' },
-                    DIV({ className: 'text-center'}, '$ ' + self.state.medPrice)
+        if(self.state.pictureOfCard || self.state.pictureOfCard === '') {
+            console.log(self.state);
+            return DIV({},
+                self.state.pictureOfCard !== '' ? IMAGE({ className: 'center-block pictureOfCard', src: self.state.pictureOfCard })
+                    : DIV({className: 'center-block pictureOfCard missingCard'}, 'Image Unavailable'),
+                DIV({ className: 'row center-block pictureOfCard'},
+                    DIV({ className: 'col-xs-12 text-center price' },
+                        DIV({ className: 'text-center'}, '$ ' + self.state.medPrice)
+                    )
+                ),
+                DIV({ className: 'text-center'},
+                    A({href: self.state.cardLink}, 'Buy ' + self.state.nameForList +' on TCGplayer')
                 )
-            ),
-            DIV({ className: 'text-center'},
-                A({href: self.state.cardLink}, 'Buy ' + self.state.nameForList +' on TCGplayer')
-            )
-        );
+            );
         }
     }
 
