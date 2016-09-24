@@ -1,6 +1,7 @@
 module.exports = {
   entry: [
-    './src/index.js'
+    './src/index.js',
+    './src/style/style.css'
   ],
   output: {
     path: __dirname,
