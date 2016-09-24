@@ -18,7 +18,6 @@ tcgPlayer.priceCheck = (req, resp) => {
     var newSet = temp1.replace(':', '');
     var temp2 = cardName.split(' ').join('-');
     var newName = temp2.replace(',', '');
-    console.log(newName, newSet);
     var storage = {
         //add magic for url and problem if card is not in cache first.
         link: 'http://shop.tcgplayer.com/magic/' + newSet + '/' + newName

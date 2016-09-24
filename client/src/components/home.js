@@ -58,7 +58,6 @@ export default class Home extends Component {
                 }
                 var medPrice = parseFloat(JSON.parse(res.text).price).toFixed(2);
                 var link = JSON.parse(res.text).link;
-                console.log(JSON.parse(res.text));
                 var imgUrl = JSON.parse(res.text).imgUrl[0];
                 self.setState({
                     medPrice: medPrice || 'Sorry no price data for ' + self.state.query,
@@ -157,7 +156,6 @@ export default class Home extends Component {
 
     renderCardInfo() {
         if(self.state.pictureOfCard || self.state.pictureOfCard === '') {
-            console.log(self.state);
             return DIV({},
                 self.state.pictureOfCard !== '' ? IMAGE({ className: 'center-block pictureOfCard', src: self.state.pictureOfCard })
                     : DIV({className: 'center-block pictureOfCard missingCard'}, 'Image Unavailable'),

@@ -10,6 +10,7 @@ Cards.getCards = (req, resp) => {
         obj.sets = data[i].sets;
         list.push(obj);
     }
+    resp.header('Cache-Control', 'public, max-age=86400');
     resp.send(list);
 });
 };
