@@ -27,3 +27,19 @@ describe('Image API', () => {
             });
     });
 });
+
+describe('XRAY API', () => {
+    before((done) => {
+        console.log('before');
+        done();
+    });
+
+    after((done) => {
+        console.log('after');
+        done();
+    });
+
+    it('Able to find Chemical X', (done) => {
+        done();
+    });
+});

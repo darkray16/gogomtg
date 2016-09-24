@@ -1,9 +1,7 @@
-const Admin = require('./modules/admin');
 const Cards = require('./modules/cards');
-const TCGplayer = require('./modules/tcgPlayer');
+const PriceCheck = require('./modules/priceCheck');
 
 module.exports = (app) => {
-  app.put('/putCardsInDB', Admin.putCardsInDB);
   app.post('/getCardsInDB', Cards.getCards);
-  app.post('/priceCheck', TCGplayer.priceCheck); 
+  app.post('/priceCheck', PriceCheck.priceCheck);
 };

@@ -60,9 +60,9 @@ export default class Home extends Component {
                     throw err;
                 }
                 var lowPrice = parseFloat(JSON.parse(res.text).low).toFixed(2);
-                var medPrice = parseFloat(JSON.parse(res.text).med).toFixed(2);
+                var medPrice = parseFloat(JSON.parse(res.text).price).toFixed(2);
                 var highPrice = parseFloat(JSON.parse(res.text).high).toFixed(2);
-                var link = 'http://' + JSON.parse(res.text).link;
+                var link = JSON.parse(res.text).link;
                 var imgUrl = JSON.parse(res.text).imgUrl[0];
                 self.setState({
                     medPrice: medPrice || 'Sorry no price data for ' + self.state.query,
@@ -167,17 +167,8 @@ export default class Home extends Component {
         return DIV({},
             IMAGE({ className: 'center-block pictureOfCard', src: self.state.pictureOfCard }),
             DIV({ className: 'row center-block pictureOfCard'},
-                DIV({ className: 'col-xs-4 text-center low' },
-                    'Low',
-                    DIV({ className: 'text-center'}, self.state.lowPrice)
-                ),
-                DIV({ className: 'col-xs-4 text-center med' },
-                    'Med',
-                    DIV({ className: 'text-center'}, self.state.medPrice)
-                ),
-                DIV({ className: 'col-xs-4 text-center high' },
-                    'High',
-                    DIV({ className: 'text-center'}, self.state.highPrice)
+                DIV({ className: 'col-xs-12 text-center price' },
+                    DIV({ className: 'text-center'}, '$ ' + self.state.medPrice)
                 )
             ),
             DIV({ className: 'text-center'},

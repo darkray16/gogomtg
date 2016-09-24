@@ -17,8 +17,8 @@ REDIS.client.auth(process.env.REDIS_PASSWORD, (err) => {
     }
 });
 
-// mongoose.connect('mongodb://localhost:mydb/mydb');
-mongoose.connect('mongodb://' + process.env.MONGO_USERNAME + ':' + process.env.MONGO_PASSWORD + '@ds027175.mlab.com:27175/' + process.env.MONGO_ENDPOINT);
+mongoose.connect('mongodb://localhost:mydb/mydb');
+// mongoose.connect('mongodb://' + process.env.MONGO_USERNAME + ':' + process.env.MONGO_PASSWORD + '@ds027175.mlab.com:27175/' + process.env.MONGO_ENDPOINT);
 
 app.use(express.static(__dirname + '/../client/'));
 app.use(bodyParser.json({ limit: '50mb', type: '*/*' }));
